@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import Button from "@material-ui/core/Button";
+import "./index.css";
 
-function App() {
+import Card from "./Card";
+
+function App(props) {
+  const [user, setUser] = useState({});
+  const [active, setActive] = useState(false);
+
+  const handleToggle = () => {
+    if (active === false) setActive(true);
+    else setActive(false);
+  };
+
+  useEffect(() => {
+    fetch("https://api.github.com/users/aamick")
+      .then((response) => response.json())
+      .then((data) => setUser(data));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Welcome</h1>
+      <Button
+        variant="contained"
+        color="secondary"
+        justifyContent="center"
+        onClick={handleToggle}
+      >
+        Toggle User
+      </Button>
+      {active === true ? <Card {...user} /> : ""}
     </div>
   );
 }
